@@ -3,4 +3,4 @@ OpenSCAD based 3D models using additional artistic source such as svg graphics o
 Content in ``exported`` subfolders is ommited alongside with the gcodes. 
 
 ## Structure description
-Each folder containing data should always contain readme with sources of used resources.
+Each folder containing data should always contain readme with citation of used resources.
