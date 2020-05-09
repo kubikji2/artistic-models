@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.0"
+   width="2400.000000pt"
+   height="2400.000000pt"
+   viewBox="0 0 2400.000000 2400.000000"
+   preserveAspectRatio="xMidYMid meet"
+   id="svg10"
+   sodipodi:docname="SCP_Foundation_base.svg"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)">
+  <defs
+     id="defs14" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     id="namedview12"
+     showgrid="false"
+     inkscape:zoom="0.2085965"
+     inkscape:cx="1722.5814"
+     inkscape:cy="1630.9101"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg10" />
+  <metadata
+     id="metadata2">
+Created by potrace 1.11, written by Peter Selinger 2001-2013
+<rdf:RDF>
+  <cc:Work
+     rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type
+       rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+  </cc:Work>
+</rdf:RDF>
+</metadata>
+  <g
+     transform="translate(0.000000,2400.000000) scale(0.100000,-0.100000)"
+     fill="#000000"
+     stroke="none"
+     id="g8">
+    <path
+       d="m 8816,22953 c -3,-16 -73,-417 -156,-893 -82,-476 -153,-871 -157,-878 -5,-7 -73,-39 -153,-71 C 6801,20486 5406,19446 4364,18140 3284,16786 2577,15172 2325,13490 c -14,-96 -31,-186 -36,-199 -20,-49 -60,-433 -79,-765 -13,-230 -13,-808 0,-1051 12,-218 31,-422 62,-683 l 22,-184 -40,-37 c -83,-78 -194,-180 -304,-281 -63,-58 -146,-134 -185,-170 -84,-79 -99,-92 -522,-484 -183,-168 -334,-310 -337,-315 -3,-4 122,-228 277,-497 155,-269 881,-1525 1612,-2791 731,-1267 1334,-2303 1340,-2303 6,0 85,27 176,61 90,33 286,105 434,159 880,322 1096,400 1104,400 6,0 36,-22 69,-49 183,-153 632,-469 927,-653 500,-312 1151,-630 1760,-858 1454,-545 3063,-737 4605,-550 823,100 1654,308 2395,600 99,39 189,72 200,74 54,9 374,155 690,314 513,260 962,538 1433,889 l 193,143 52,-16 c 29,-9 66,-20 82,-26 47,-15 503,-157 570,-177 116,-35 650,-202 675,-211 14,-5 72,-23 130,-40 58,-18 147,-45 198,-62 51,-16 97,-28 102,-26 12,4 3232,5579 3228,5588 -3,7 -195,169 -998,838 -201,168 -373,313 -384,322 -18,18 -18,21 2,167 111,782 124,1556 41,2373 -192,1889 -916,3661 -2105,5152 -762,956 -1725,1780 -2794,2391 -335,191 -801,420 -1137,557 -46,18 -85,41 -87,49 -3,9 -96,419 -206,911 -111,492 -204,903 -206,913 -5,16 -168,17 -3234,17 H 8822 Z"
+       id="path4"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccccccccccscsccscccccccccccccccccccccccccccscc" />
+  </g>
+</svg>
