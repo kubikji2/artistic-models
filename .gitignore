@@ -1,0 +1,5 @@
+*.gcode
+*.3mf
+*export*
+*exported*
+*gcode*
