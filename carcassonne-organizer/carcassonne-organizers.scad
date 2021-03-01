@@ -13,53 +13,77 @@ tol_z = 0.5;    // tolerance for bridges
 cs_bx = 423;
 cs_by = 308;
 cs_bz = 90;
-// '-> single card parameters
-cs_ca = 45.5; // card side
-cs_ct = 2.22;  // card thickness
-// '-> score board
+// '-> card parameters
+cs_ca = 45.5;   // card side
+cs_ct = 2.22;   // card thickness
+// '-> score board parameters
 cs_sbx = 260;
 cs_sby = 180;
 cs_sbz = 2;
 
 // derived parameters
 // carcassonne section parameters
+// '-> whole carcassone box must be devided into four sections
+//     '-> box is too big for print area of common printers
 cs_sx = cs_bx/2;
 cs_sy = cs_by/2;
+// testing sizes
 //cs_sx = 75;
 //cs_sy = 50;
-cs_sz = cs_bz;
-cs_sd = 15;
-cs_swt = 2;
-cs_sbt = 2;
+cs_sz = cs_bz;  // z coordinate is not devided
+cs_sd = 15;     // round diameter
+cs_swt = 2;     // wall thickness
+cs_sbt = 2;     // bottom (wall) thickness
+cs_stt = 4;     // top thickness
 
 // carcassonne section cover
 // '-> cs_sc
+// '-> cover for box section, obsolete
+/*
 cs_scx = cs_sx;
 cs_scy = cs_sy;
 cs_scz = cs_sbt+cs_ca+(cs_bz-cs_ca-cs_sbt)/2;
+*/
 
-// board card space
+// [!] each section is either used or empty frame is added to fill the area
+// [!] filled area is devided into compartements:
+//     '-> lower card compartement
+//     '-> upper figure compartement
+
+// card compartement parameteres
 // '-> cs_sp
-cs_spx = cs_sx;
-cs_spy = cs_sy;
-cs_spz = cs_ca/2+tol;
+// '-> fill in whole box sections in XY plane
+// '-> z coordinate is defined by card size and the bottom wall thisckness
+cs_ccx = cs_sx;
+cs_ccy = cs_sy;
+cs_ccz = cs_sbt+cs_ca+tol_z+cs_stt;
 
-// board card holes parameters
+// card storage separator parameters
+// '-> cs_css
+cs_cssx = 2*cs_ct;
+cs_cssy = cs_ct;
+cs_cssz = cs_ca;
+cs_cssdist = cs_ct;
+
+// card storage parameters
 // '-> cs_ch
-cs_chx = cs_ca+tol; 
-cs_chz = cs_ca+tol;
+cs_csx = cs_ca+tol;
+cs_csz = cs_ca+tol;
 
-// computing
-cs_chx_cnt = floor(cs_sx/(cs_chx+4*cs_ct));
-cs_chx_dist = (cs_sx-2*(cs_swt+tol)-cs_chx_cnt*cs_chx)/(cs_chx_cnt+1);
+// computing distance between card storages and number of card storage
+// '-> from x dimentison subrstract rounding diameters
+// '-> devide this useful dimension by the x size of the storage with separator rails
+cs_csx_cnt = floor((cs_sx-cs_sd)/(cs_csx+cs_cssdist+cs_cssx+cs_cssdist));
+echo(cs_csx_cnt);
+cs_csx_dist = (cs_sx-2*(cs_swt+tol)-cs_csx_cnt*cs_csx)/(cs_csx_cnt+1);
 
-cs_chy_cnt = floor((cs_sy-4*cs_swt-2*tol)/cs_ct);
-cs_chy_dist = cs_sy-4*cs_swt-2*tol-cs_chy_cnt*cs_ct;
-cs_chy = cs_chy_cnt*cs_ct;
-echo(cs_chy_cnt);
-// board card separator
-// '-> cs_cd
-cs_cd_d = 5;
+// coputing number of card stored in the single card storage
+cs_csy_cnt = floor((cs_sy-4*cs_swt-2*tol)/cs_ct);
+// '-> aka card count
+cs_csy_dist = cs_sy-4*cs_swt-2*tol-cs_csy_cnt*cs_ct;
+cs_csy = cs_csy_cnt*cs_ct;
+echo(cs_csy_cnt);
+
 
 
 module main_body()
@@ -67,49 +91,55 @@ module main_body()
     cube_r([cs_sx,cs_sy,cs_sz],cs_sd);
 }
 
-module card_separator()
+module card_compartement()
 {
     difference()
     {
         // main body
-        main_body();
+        cube_r([cs_ccx,cs_ccy, cs_ccz], cs_sd);
         
-        // box_cover
-        translate([0-eps,cs_sy+eps,cs_sz+eps])
-            rotate([180,0,0])
-                box_r([cs_scx+2*eps, cs_scy+2*eps, cs_scz+2*eps], cs_sd, cs_swt+tol, cs_sbt+tol_z);
-        
-        // cuting half of the sccae for the cards
-        translate([0,0,cs_sz-cs_sbt-cs_spz])
-            cube([cs_spx, cs_spy, cs_spz]);
-        
+        // center cut
+        translate([cs_swt,cs_swt,cs_sbt+cs_ca/2])
+            cube_r([cs_ccx-2*cs_swt, cs_ccy-2*cs_swt, cs_ccz], cs_sd-2*cs_swt)
+                
         // hole for cards
-        for(i=[0:cs_chx_cnt-1])
+        echo([cs_csx, cs_csy, cs_csz]);
+        for(i=[0:cs_csx_cnt-1])
         {
-            off_x = i*(cs_chx_dist+cs_chx)+cs_chx_dist+cs_swt+tol;
-            translate([off_x,tol+2*cs_swt,cs_sz-cs_sbt-cs_chz])
-                cube([cs_chx, cs_chy, cs_chz]);
+            off_x = i*(cs_csx_dist+cs_csx)+cs_csx_dist+cs_swt+tol;
+            translate([off_x,tol+2*cs_swt,cs_sbt])
+                cube([cs_csx, cs_csy, cs_csz]);
+            
             
             // holes for the card separator
-            for(j=[0:round(cs_chy_cnt/2)-1])
+            for(j=[0:round(cs_csy_cnt/2)-1])
             {
                 off_y = 2*j*cs_ct;
-                translate([off_x-3*cs_ct,tol+2*cs_swt+off_y,cs_sz-cs_sbt-cs_spz-cs_cd_d+eps])
-                    cube([2*cs_ct,cs_ct,cs_cd_d]);
-                translate([off_x+cs_chx+1*cs_ct,tol+2*cs_swt+off_y,cs_sz-cs_sbt-cs_spz-cs_cd_d+eps])
-                    cube([2*cs_ct,cs_ct,cs_cd_d]);
+                // left side
+                translate([off_x-3*cs_ct, tol+2*cs_swt+off_y, cs_sbt])
+                    cube([2*cs_ct,cs_ct,cs_ca]);
+                // right side
+                translate([off_x+cs_csx+1*cs_ct, tol+2*cs_swt+off_y, cs_sbt])
+                    cube([2*cs_ct,cs_ct,cs_ca]);
             }
+            
         }
         
-        // lower hole to decrease material consumption
-        translate([2*cs_swt,2*cs_swt,-eps])
-            cube_r([cs_sx-4*cs_swt,cs_sy-4*cs_swt,cs_sz-cs_sbt-tol-cs_ca-cs_sbt], cs_sd-2*cs_swt);
+        // cutting sides
+        translate([cs_sd/2,-eps,cs_ccz+cs_ca/2])
+            rotate([-90,0,0])
+                cube_r([cs_sx-cs_sd,cs_ca+tol_z+cs_stt, cs_sy+2*eps], cs_ca);  
+        
+        // cutting finger holes
+        translate([-eps,cs_sy/2,cs_ccz-cs_stt-cs_ca/4])
+            rotate([0,90,0])
+                cylinder(d=cs_ca/2-2*cs_sbt,h=cs_sx+2*eps);
         
         
     }
 }
 
-card_separator();
+card_compartement();
 
 module card_separator_cover()
 {
