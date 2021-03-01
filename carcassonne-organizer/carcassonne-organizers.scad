@@ -195,7 +195,31 @@ module figure_compartement()
     }
 }
 
-
 translate([0,0,cs_ccz+tol_z])
     figure_compartement();
+
+// single color figures storage parameters
+// '-> cs_fs
+cs_fsx = (cs_fcx - 2*cs_swt - 6*tol_f)/3;
+cs_fsy = (cs_fcy - 2*cs_swt - 6*tol_f)/3;
+cs_fsz = cs_fcz - cs_sbt - tol_z;
+cs_fsd = cs_sd-2*cs_swt-2*tol_f;
+
+module figure_storage()
+{
+    // main shape
+    box_r([cs_fsx, cs_fsy, cs_fsz], cs_fsd, cs_swt);
+}
+
+translate([0,0,cs_ccz+2*tol_z+cs_sbt])
+for (i=[0:2])
+{
+    x_off = i*(cs_fsx+tol_f)+tol_f+cs_swt;
+    for(j=[0:2])
+    {
+        y_off = j*(cs_fsy+tol_f)+tol_f+cs_swt;
+        translate([x_off, y_off,0])
+            figure_storage();
+    }
+}
 
