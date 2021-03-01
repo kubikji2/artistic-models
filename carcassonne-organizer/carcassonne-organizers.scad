@@ -6,6 +6,7 @@ $fn = 90;
 tol_t = 0.1;    // tight tolerance
 tol = 0.25;     // default tolerance
 tol_z = 0.5;    // tolerance for bridges
+tol_f = 0.4;    // free movement tolerance
 
 // Carcassone parameters
 // '-> cs as prefix
@@ -83,9 +84,6 @@ cs_csy_cnt = floor((cs_sy-4*cs_swt-2*tol)/cs_ct);
 echo(cs_csy_cnt);
 cs_csy_dist = cs_sy-4*cs_swt-2*tol-cs_csy_cnt*cs_ct;
 cs_csy = cs_csy_cnt*cs_ct;
-
-
-
 
 module card_compartement()
 {
@@ -174,19 +172,30 @@ module card_separator()
 
 //card_separator();
 
-module card_separator_cover()
+// figures compartement parameters
+// '-> cs_fc
+cs_fcx = cs_sx;
+cs_fcy = cs_sy;
+cs_fcz = cs_sz - cs_ccz - tol_z - tol_z;
+echo(cs_fcz);
+
+module figure_compartement()
 {
-    // box_cover
-    translate([0-eps,cs_sy+eps,cs_sz+eps])
-        rotate([180,0,0])
-            box_r([cs_scx+2*eps, cs_scy+2*eps, cs_scz+2*eps-tol], cs_sd, cs_swt, cs_sbt+tol_z);
+    difference()
+    {
+        union()
+        {
+            // main shape
+            box_r([cs_fcx, cs_fcy, cs_fcz], cs_sd, cs_swt, cs_sbt);
+            
+            // interface
+            translate([cs_swt+tol_f, cs_swt+tol_f, -cs_stt])
+                cube_r([cs_fcx-2*cs_swt-2*tol_f,cs_fcy-2*cs_swt-2*tol_f,cs_stt],cs_sd-2*cs_swt-2*tol_f);
+        }
+    }
 }
 
-//card_separator_cover();
 
-module test_box()
-{
-    box([10,10,10],2);
-}
+translate([0,0,cs_ccz+tol_z])
+    figure_compartement();
 
-//test_box();
