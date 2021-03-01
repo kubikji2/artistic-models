@@ -77,19 +77,15 @@ cs_csx_cnt = floor((cs_sx-cs_sd)/(cs_csx+cs_cssdist+cs_cssx+cs_cssdist));
 echo(cs_csx_cnt);
 cs_csx_dist = (cs_sx-2*(cs_swt+tol)-cs_csx_cnt*cs_csx)/(cs_csx_cnt+1);
 
-// coputing number of card stored in the single card storage
-cs_csy_cnt = floor((cs_sy-4*cs_swt-2*tol)/cs_ct);
+// computing number of card stored in the single card storage
 // '-> aka card count
+cs_csy_cnt = floor((cs_sy-4*cs_swt-2*tol)/cs_ct);
+echo(cs_csy_cnt);
 cs_csy_dist = cs_sy-4*cs_swt-2*tol-cs_csy_cnt*cs_ct;
 cs_csy = cs_csy_cnt*cs_ct;
-echo(cs_csy_cnt);
 
 
 
-module main_body()
-{
-    cube_r([cs_sx,cs_sy,cs_sz],cs_sd);
-}
 
 module card_compartement()
 {
@@ -140,6 +136,43 @@ module card_compartement()
 }
 
 card_compartement();
+
+// cart separator thickness
+cs_cst = 2;
+
+module card_separator()
+{
+    difference()
+    {
+        union()
+        {            
+            // main shape
+            cube_r([cs_ca-2*tol,cs_ca-2*tol,2*cs_cst],4);
+                
+            // upper connector
+            translate([-3*cs_ct,cs_ca/2+tol,0])
+                cube_r([cs_ca-2*tol+6*cs_ct,cs_ca/2-3*tol,cs_cst], 4);
+            
+                // left wing
+            translate([0-cs_ct-tol-2*cs_cst-(cs_ct-cs_cst),0,0])
+                cube_r([2*cs_cst, cs_ca-2*tol, cs_cst],4);
+            //%translate([0-cs_ct-tol-(cs_ct-cs_cst),0,0])
+            //    cube([cs_ct+tol+(cs_ct-cs_cst), cs_ca-2*tol, cs_cst]);
+            //right wing
+            translate([cs_ca-2*tol+cs_ct+tol+(cs_ct-cs_cst),0,0])
+                cube_r([2*cs_cst, cs_ca-2*tol, cs_cst],4);
+            //%translate([cs_ca-2*tol,0,0])
+            //    cube([cs_ct+tol+(cs_ct-cs_cst), cs_ca-2*tol, cs_cst]);
+            
+        }
+        
+        // cut for easier access
+        translate([cs_ca/2-2*tol,cs_ca-2*tol,-eps])
+            cylinder(d=0.75*cs_ca-2*tol,h=2*cs_cst+2*eps);
+    }  
+}
+
+//card_separator();
 
 module card_separator_cover()
 {
