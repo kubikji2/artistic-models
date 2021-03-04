@@ -133,7 +133,7 @@ module card_compartement()
     }
 }
 
-card_compartement();
+//card_compartement();
 
 // cart separator thickness
 cs_cst = 2;
@@ -192,11 +192,26 @@ module figure_compartement()
             translate([cs_swt+tol_f, cs_swt+tol_f, -cs_stt])
                 cube_r([cs_fcx-2*cs_swt-2*tol_f,cs_fcy-2*cs_swt-2*tol_f,cs_stt],cs_sd-2*cs_swt-2*tol_f);
         }
+        
+        // side cut
+        //translate([cs_sd/2,-eps,cs_fcz+cs_ca/2])
+        translate([cs_sd/2,-eps,cs_fcz+cs_fcz/2])
+            rotate([-90,0,0])
+                cube_r([cs_sx-cs_sd, cs_fcz-2*cs_sbt, cs_sy+2*eps], cs_fcz-2*cs_sbt);  
+        
+        
+        // cutting finger holes
+        translate([-eps,cs_sy/2, cs_fcz/2+cs_sbt])
+            rotate([0,90,0])
+                cylinder(d=cs_ca/2-2*cs_sbt,h=cs_sx+2*eps);
+        
     }
 }
 
+/*
 translate([0,0,cs_ccz+tol_z])
     figure_compartement();
+*/
 
 // single color figures storage parameters
 // '-> cs_fs
@@ -211,6 +226,9 @@ module figure_storage()
     box_r([cs_fsx, cs_fsy, cs_fsz], cs_fsd, cs_swt);
 }
 
+figure_storage();
+
+/*
 translate([0,0,cs_ccz+2*tol_z+cs_sbt])
 for (i=[0:2])
 {
@@ -222,4 +240,4 @@ for (i=[0:2])
             figure_storage();
     }
 }
-
+*/
