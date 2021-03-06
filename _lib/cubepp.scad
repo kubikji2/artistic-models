@@ -197,9 +197,8 @@ module _box_r(x,y,z,d,wt,bt, center=false)
     
     assert(d>=2*wt, str("given diameter d=",d," must be at least twice of wall thickness wt=", wt));  
    
-    r = d/2;
     // solve center transform
-    tf = center ? [r-x/2,r-y/2,r-z/2] : [0,0,0];
+    tf = center ? [-x/2,-y/2,z/2] : [0,0,0];
     
     translate(tf)
     difference()
