@@ -1,4 +1,5 @@
 include<../_lib/cubepp.scad>;
+include<../_lib/patter-cuts.scad>;
 
 // GENERIC PARAMETERS
 eps = 0.01;
@@ -226,7 +227,7 @@ module figure_storage()
     box_r([cs_fsx, cs_fsy, cs_fsz], cs_fsd, cs_swt);
 }
 
-figure_storage();
+//figure_storage();
 
 /*
 translate([0,0,cs_ccz+2*tol_z+cs_sbt])
@@ -241,3 +242,57 @@ for (i=[0:2])
     }
 }
 */
+
+
+module section_filler()
+{
+    sf_h = 80;
+    difference()
+    {   
+        // main shape
+        box_r([cs_sx, cs_sy, sf_h],cs_sd, cs_swt, 3);
+        
+        _size = cs_sy-10*cs_swt;
+        //_size = cs_sx;
+        _sf = _size/100;
+        _h = 1.5;
+        _wt = 2;
+        
+        // cut ornament
+        translate([cs_sx/2,cs_sy/2,0])
+        {
+            // carcassonne logo
+            translate([0,0,+_h-eps])
+                rotate([0,180,0])
+                    scale([_sf,_sf,_h/10])
+                        import("card-back-raw.stl");
+            
+            // border
+            translate([0,0,-_h/2-eps])
+                box_r([_size+2*_wt,_size+2*_wt, _h], cs_sd, _wt+0.5, eps, center=true);
+        }
+        
+        // front hexagonal pattern
+        _off = 4;
+        sx = [cs_sx-cs_sd, sf_h-2*_off, cs_swt+2*eps];
+        translate([cs_sd/2,-eps,_off])
+            hexagonal_pattern(sx, cs_sd, _off, vertical=true);
+        
+        // back hexagonal pattern
+        translate([cs_sd/2,cs_sy-eps-cs_swt,_off])
+            hexagonal_pattern(sx, cs_sd, _off, vertical=true);
+        
+        // left
+        sy = [cs_sy-cs_sd, sf_h-2*_off, cs_swt+2*eps];
+        rotate([0,0,90])
+            translate([cs_sd/2,-cs_swt-eps,_off])
+                hexagonal_pattern(sy, cs_sd, _off, vertical=true);
+        
+        // right
+        rotate([0,0,90])
+            translate([cs_sd/2,-cs_sx-eps,_off])
+                hexagonal_pattern(sy, cs_sd, _off, vertical=true);
+    }
+}
+
+section_filler();
