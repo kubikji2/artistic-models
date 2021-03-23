@@ -49,9 +49,8 @@ cs_stt = 4;     // top thickness
 // '-> cs_sp
 // '-> fill in whole box sections in XY plane
 // '-> z coordinate is defined by card size and the bottom wall thisckness
-cs_ccx = cs_sd+3*cs_ca+cs_swt+2*4*(cs_swt);
 cs_ccy = cs_sy;
-cs_ccz = cs_sbt+cs_ca+tol_z;
+cs_ccz = cs_sbt+cs_ca;
 
 // card storage separator parameters
 // '-> cs_css
@@ -71,12 +70,18 @@ cs_csz = cs_ca+tol;
 cs_csx_cnt = 3;
 cs_csx_dist = cs_sd/2;
 
+// card compartement x coordinate computed based on the size of its content
+cs_ccx = cs_sd+cs_csx_cnt*cs_csx+cs_swt+2*4*(cs_ct);
+
 // computing number of card stored in the single card storage
 // '-> aka card count
-cs_csy_cnt = floor((cs_sy-4*cs_swt-2*tol)/cs_ct);
-echo(cs_csy_cnt);
-cs_csy_dist = cs_sy-4*cs_swt-2*tol-cs_csy_cnt*cs_ct;
+cs_csy_cnt = floor((cs_ccy-4*cs_swt-2*tol)/cs_ct);
+//echo(cs_csy_cnt);
+cs_csy_dist = cs_ccy-4*cs_swt-2*tol-cs_csy_cnt*cs_ct;
 cs_csy = cs_csy_cnt*cs_ct;
+cs_csy_off = 2*cs_swt+tol;
+//echo(cs_ccy);
+//echo(cs_csy);
 
 module card_compartement()
 {
@@ -87,38 +92,40 @@ module card_compartement()
         
         // center cut
         translate([cs_swt,cs_swt,cs_sbt+cs_ca/2])
-            cube_r([cs_ccx-2*cs_swt, cs_ccy-2*cs_swt, cs_ccz], cs_sd-2*cs_swt)
+            cube_r([cs_ccx-2*cs_swt, cs_ccy-2*cs_swt, cs_ccz], cs_sd-2*cs_swt);
                 
         // hole for cards
-        echo([cs_csx, cs_csy, cs_csz]);
+        //echo([cs_csx, cs_csy, cs_csz]);
         for(i=[0:cs_csx_cnt-1])
         {
             is_last = (i == cs_csx_cnt-1);
-            off_x = i*(cs_swt+cs_csx)+cs_sd/2+tol + (is_last ? 3*cs_ct : 0);
-            translate([off_x,tol+2*cs_swt,cs_sbt])
-                cube([cs_csx, cs_csy, cs_csz]);
+            off_x = cs_sd/2 + i*(cs_swt+cs_csx) + (is_last ? 4*cs_ct-cs_swt : 0);
+            translate([off_x, 2*cs_swt,cs_sbt])
+                cube([cs_csx, cs_csy+2*tol, cs_csz]);
             
             if(is_last)
             {
                 // holes for the card separator
                 for(j=[0:round(cs_csy_cnt/2)-1])
                 {
-                    off_y = 2*j*cs_ct;
+                    off_y = cs_csy_off + 2*j*cs_ct;
                     // left side
-                    translate([off_x-3*cs_ct, tol+2*cs_swt+off_y, cs_sbt])
-                        cube([2*cs_ct,cs_ct,cs_ca]);
+                    translate([off_x-3*cs_ct-tol_f/2, off_y-tol_f/2, cs_sbt])
+                        cube([2*cs_ct+tol_f,cs_ct+tol_f,cs_ca]);
                     // right side
-                    translate([off_x+cs_csx+1*cs_ct, tol+2*cs_swt+off_y, cs_sbt])
-                        cube([2*cs_ct,cs_ct,cs_ca]);
+                    translate([off_x+cs_csx+1*cs_ct-tol_f/2, off_y-tol_f/2, cs_sbt])
+                        cube([2*cs_ct+tol_f,cs_ct+tol_f,cs_ca]);
                 }
             }
             
+            
         }
+        
         
         // cutting sides
         translate([cs_sd/2,-eps,cs_ccz+cs_ca/2])
             rotate([-90,0,0])
-                cube_r([cs_ccx-cs_sd,cs_ca+tol_z+cs_stt, cs_sy+2*eps], cs_ca);  
+                cube_r([cs_ccx-cs_sd,cs_ca, cs_sy+2*eps], cs_ca);  
         
         // cutting finger holes
         translate([-eps,cs_sy/3,cs_ccz-cs_ca/4])
@@ -151,7 +158,7 @@ module card_separator()
             translate([-3*cs_ct,cs_ca/2+tol,0])
                 cube_r([cs_ca-2*tol+6*cs_ct,cs_ca/2-3*tol,cs_cst], 4);
             
-                // left wing
+            // left wing
             translate([0-cs_ct-tol-2*cs_cst-(cs_ct-cs_cst),0,0])
                 cube_r([2*cs_cst, cs_ca-2*tol, cs_cst],4);
             //%translate([0-cs_ct-tol-(cs_ct-cs_cst),0,0])
