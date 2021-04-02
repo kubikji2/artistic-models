@@ -1,5 +1,5 @@
 include<../_lib/cubepp.scad>;
-include<../_lib/patter-cuts.scad>;
+include<../_lib/pattern-cuts.scad>;
 
 // GENERIC PARAMETERS
 eps = 0.01;
@@ -28,7 +28,7 @@ cs_sbz = 2;
 // carcassonne section parameters
 // '-> whole carcassone box must be devided into four sections
 //     '-> box is too big for print area of common printers
-cs_sx = cs_bx/2;
+cs_sx = cs_bx;
 // in case of legasy version there is no division in y axis
 cs_sy = cs_by;
 // testing sizes
@@ -140,7 +140,7 @@ module card_compartement()
     }
 }
 
-card_compartement();
+//card_compartement();
 
 // cart separator thickness
 cs_cst = 2;
@@ -181,9 +181,10 @@ module card_separator()
 
 // figures compartement parameters
 // '-> cs_fc
-cs_fcx = cs_sx;
+cs_fcx = cs_sx-cs_ccx;
+echo(cs_fcx);
 cs_fcy = cs_sy;
-cs_fcz = cs_sz - cs_ccz - tol_z - tol_z;
+cs_fcz = cs_ccz;
 echo(cs_fcz);
 
 module figure_compartement()
@@ -222,10 +223,10 @@ translate([0,0,cs_ccz+tol_z])
 
 // single color figures storage parameters
 // '-> cs_fs
-cs_fsx = (cs_fcx - 2*cs_swt - 6*tol_f)/3;
-cs_fsy = (cs_fcy - 2*cs_swt - 6*tol_f)/3;
-cs_fsz = cs_fcz - cs_sbt - tol_z;
-cs_fsd = cs_sd-2*cs_swt-2*tol_f;
+cs_fsx = (cs_fcx - 2*tol_f)/2;
+cs_fsy = (cs_fcy - 3*tol_f)/3;
+cs_fsz = 2*cs_fcz/3 - tol_z;
+cs_fsd = cs_sd;
 
 module figure_storage()
 {
@@ -233,7 +234,29 @@ module figure_storage()
     box_r([cs_fsx, cs_fsy, cs_fsz], cs_fsd, cs_swt);
 }
 
-//figure_storage();
+figure_storage();
+
+
+// upper compartement parameteres
+cs_lsx = 2*cs_fsx;
+cs_lsy = 2*cs_fsy;
+cs_lsz = cs_fcz/3;
+cs_lsd = cs_sd;
+
+module large_storage()
+{
+    box_r([cs_lsx, cs_lsy, cs_lsz], cs_lsd, cs_swt);
+}
+
+//large_storage();
+
+module double_storage()
+{
+    box_r([2*cs_fsx, cs_fsy, cs_lsz], cs_fsd, cs_swt);
+}
+
+//double_storage();
+
 
 /*
 translate([0,0,cs_ccz+2*tol_z+cs_sbt])

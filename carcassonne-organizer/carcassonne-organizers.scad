@@ -1,5 +1,5 @@
 include<../_lib/cubepp.scad>;
-include<../_lib/patter-cuts.scad>;
+include<../_lib/pattern-cuts.scad>;
 
 // GENERIC PARAMETERS
 eps = 0.01;
