@@ -2,14 +2,16 @@
 // roadmap:
 //  - cube - done, testing
 //  - cylinder 
-//  - cube++ ? 
+//  - cube++  
+
+include<cubepp.scad>;
 
 // basic cube with tolerances xyz
 module _cube_txyz(x, y, z, tolx, toly, tolz, center=false)
 {
-    _x = x + 2*tolx;
-    _y = y + 2*toly;
-    _z = z + 2*tolz;
+    _x = x + tolx;
+    _y = y + toly;
+    _z = z + tolz;
 
     // centering is same for center=true,
     // for center true, tolerances are added intuitively
@@ -44,4 +46,17 @@ module cube_txyz(s, tols, center=false)
     _cube_txyz(s.x, s.y, s.z, tols.x, tols.y, tols.z, center);
 }
 
+// baseline for the rounded cubes
+module _cube_r_txyz(x, y, z, d, tolx, toly, tolz, center=false)
+{
+    _x = x + tolx;
+    _y = y + toly;
+    _z = z + tolz;
 
+    // centering is same for center=true,
+    // for center true, tolerances are added intuitively
+    t = center ? [-_x/2, -_y/2, -_z/2] : [-tolx/2, -toly/2, -tolz/2];
+    translate(t)
+        // TODO solve how to resize diameter?
+        cube_r([_x,_y,_z], d);
+}
