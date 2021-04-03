@@ -34,7 +34,7 @@ module _round_cube(x,y,z,d,center=false)
     C = z;
     
     // solve center transform
-    t = center ? [d/2-x/2,d/2-y/2,-y/2] : [d/2,d/2,0];
+    t = center ? [d/2-x/2,d/2-y/2,-z/2] : [d/2,d/2,0];
     
     // hull-less implementation to speed up process
     translate(t)
@@ -227,6 +227,39 @@ module box_r(s,d,wt,bt=NAN, center=false)
     assert(len(s)==3, str("given size vector has size, ", len(s), " but size 3 is required"));
     _bt = is_num(bt) ? bt : wt;
     _box_r(s.x,s.y,s.z,d,wt,_bt, center);
+}
+
+module _cover_r(x,y,z,d,wt,bt, center=false)
+{
+    assert(wt>0, str("given wall thickness wt=",wt," must be greater than zero"));
+    if (wt!=bt)
+    {
+        assert(bt>0, str("given botton thickness bt=",bt," must be greater than zero"));
+    }
+    
+    assert(d>=2*wt, str("given diameter d=",d," must be at least twice of wall thickness wt=", wt));  
+   
+    // solve center transform
+    tf = center ? [-x/2,-y/2,z/2] : [0,0,0];
+    
+    translate(tf)
+    difference()
+    {
+        
+        // outer shell
+        cube_r([x,y,z],d);
+        
+        // hole
+        translate([wt,wt,-bt])
+            cube_r([x-2*wt,y-2*wt,z],d-2*wt);
+    }
+}
+
+module cover_r(s,d,wt,bt=NAN, center=false)
+{
+    assert(len(s)==3, str("given size vector has size, ", len(s), " but size 3 is required"));
+    _bt = is_num(bt) ? bt : wt;
+    _cover_r(s.x, s.y, s.z, d, wt, _bt, center);
 }
 
 // sleeve
