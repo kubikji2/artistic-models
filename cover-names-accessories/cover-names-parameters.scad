@@ -25,7 +25,7 @@ l_bz = 50;
 l_bd = 10;
 
 // name tags 
-ntx = 68;
+ntx = 68.5;
 nty = 45;
 
 // name tags stack 
@@ -34,14 +34,15 @@ nts = 39;
 
 // characters parameters
 ccx = 73;
-ccy = 48;
+ccy = 49;
+ccz = 1.5;
 ccs = 36;
 
-// layout parameters
+// contact layout parameters
 la = 68;
 ls = 11.5;
 
 // hourglass parameters
-hgd = 20;
-hgh = 94;
+hgd = 22;
+hgh = 95;
 

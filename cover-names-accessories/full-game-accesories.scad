@@ -3,17 +3,29 @@ include<cover-names-parameters.scad>
 // including skew it module
 include<../_lib/skew-it.scad>
 
-// paramters for organizer
+// organizer parameters
 _oy = l_by;
 _oz = l_bz-2*bt;
-_ox = l_bd/2+nts+wt+max(ccs+sqrt(ccy*ccy-_oz*_oz),
-                        ls+sqrt(la*la-_oz*_oz))
-        +wt+l_bd/2;
-
 _or = l_bd/2;
 
-// TODO paramters for fill
+// skew angle for persons
+sca = _oz/(ccy+ccz+tol_l+1);
+cang = 90-asin(sca);
+cx = ccs/sca;
+//echo(str(ccs, " is now ", cx));
 
+// skew angle for layout cards
+sla = _oz/(la+2);
+lang = 90-asin(sla);
+lx = ls/sla;
+//echo(str(ls, " is now ", lx));
+
+// x dimension of the organizer
+_ox = l_bd/2+nts+wt+ max(cx+sqrt(ccy*ccy-_oz*_oz), lx+sqrt(la*la-_oz*_oz))
+        +2*wt+l_bd/2;
+
+
+// TODO paramters for fill
 
 // this modules contain holes for both box and organizer.
 module holes(x,y,z,r, box=true)
@@ -26,27 +38,25 @@ module holes(x,y,z,r, box=true)
     translate([r,y-r-ntx,bt])
         cube_txyz([nts, ntx, z], [tol, tol, tol]);
 
-    // adding skewed hole for persons
-    ap = 90-asin(z/(ccy+2));
+    // adding skewed hole for persons 
     translate([r+nts+wt,r,bt])
     {
         hull()
         {
-            skew(xz=ap)
-                cube([ccs,ccx,z]);
-            cube([ccs,ccx,z]);
+            skew(xz=cang)
+                cube([cx,ccx,z]);
+            cube([cx,ccx,z]);
         }
     }
 
     // adding hole for layut
-    al = 90-asin(z/(la+1));
     translate([r+nts+wt,y-r-la,bt])
     {
         hull()
         {
-            skew(xz=al)
-                cube([ls,la,z]);
-            cube([ls,la,z]);
+            skew(xz=lang)
+                cube([lx,la,z]);
+            cube([lx,la,z]);
         }
     }
 
@@ -96,7 +106,7 @@ module organizer()
     }
 }
 
-//organizer();
+organizer();
 
 module box_cover()
 {
@@ -118,11 +128,11 @@ module box_cover()
             // add pattern
             _g = _ox/5;
             _pattern = [
-                        "r", "e", "b", "r", "b",
-                        "r", "r", "b", "e", "r",
-                        "e", "b", "r", "b", "e",
+                        "b", "e", "b", "r", "b",
+                        "r", "r", "r", "e", "b",
+                        "e", "b", "r", "e", "b",
                         "e", "r", "b", "k", "e",
-                        "b", "b", "e", "b", "r"
+                        "b", "r", "e", "b", "r"
             ];
             translate([2*wt,(_oy-_ox)/2,_oz-bt])
                 pattern(_pattern,g=_g);
@@ -159,7 +169,7 @@ module pattern(pattern,g=25,dist=1)
                 // shape
                 if (i>=0 && i<=4 && j >= 0 && j<=4)
                 {
-                    c=pattern[25-(j+5*i)];
+                    c=pattern[((4-j)+5*(4-i))];
                     translate([g/2-dist/2,g/2-dist/2,-eps2])
                     if(c=="r")
                     {   
