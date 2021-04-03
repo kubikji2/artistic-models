@@ -42,7 +42,6 @@ module cube_txyz(s, tols, center=false)
 {
     assert(len(s)==3, str("given size vector has size, ", len(s), " but size 3 is required!"));
     assert(len(tols)==3, str("given size vector has size, ", len(tols), " but size 3 is required!"));
-    echo("s, tols");
     _cube_txyz(s.x, s.y, s.z, tols.x, tols.y, tols.z, center);
 }
 
