@@ -6,6 +6,7 @@ include<../_lib/holespp.scad>;
 
 // generic parameters
 eps = 0.01;
+eps2 = eps/2;
 $fn = 90;
 tol_l = 0.6;
 tol_f = 0.4;

@@ -4,7 +4,7 @@ include<cover-names-parameters.scad>
 include<../_lib/skew-it.scad>
 
 // this modules contain holes for both box and organizer.
-module holes(x,y,z,r,, box=true)
+module holes(x,y,z,r, box=true)
 {
     // front name tags compartment
     translate([r, r, bt])
@@ -66,6 +66,11 @@ module holes(x,y,z,r,, box=true)
         rotate([0,90,0])
             cylinder_thd(h=r+nts+wt,d=ntx/2,tol_h=2*eps,tol_d=0);
 
+    if(box)
+    {
+        translate([-eps2,-eps2,bt])
+            sleeve_r(s=[x+eps,y+eps,z], d=2*r, wt=wt+tol_l);
+    }
 }
 
 // this module is placed in the
@@ -82,7 +87,7 @@ module organizer()
     difference()
     {
         cube_r([_ox, _oy, _oz], d=2*_or);
-        holes(_ox, _oy, _oz, _or);
+        holes(_ox, _oy, _oz, _or,true);
     }
 }
 
