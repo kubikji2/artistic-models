@@ -46,6 +46,27 @@ module cube_txyz(s, tols, center=false)
     _cube_txyz(s.x, s.y, s.z, tols.x, tols.y, tols.z, center);
 }
 
+// cylinder
+module _cylinder_thd(h, d, th, td, center=false)
+{
+    _h = h + th;
+    _d = d + td;
+
+    t = center ? [0,0,0] : [0,0,-th/2];
+    translate(t)
+        cylinder(d=_d, h=_h, center=center);
+}
+
+module cylinder_thd(h, d, tol_h, tol_d, center=false)
+{
+    _cylinder_thd(h=h, d=d, th=tol_h, td=tol_d, center=center);
+}
+
+module cylinder_thr(h, r, tol_h, tol_r, center=false)
+{
+    _cylinder_thd(h=h, d=2*r, th=tol_h, td=2*tol_r, center);
+}
+
 // baseline for the rounded cubes
 module _cube_r_txyz(x, y, z, d, tolx, toly, tolz, center=false)
 {
