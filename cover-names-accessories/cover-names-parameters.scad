@@ -40,3 +40,7 @@ ccs = 36;
 la = 68;
 ls = 11.5;
 
+// hourglass parameters
+hgd = 20;
+hgh = 94;
+
