@@ -229,6 +229,60 @@ module box_r(s,d,wt,bt=NAN, center=false)
     _box_r(s.x,s.y,s.z,d,wt,_bt, center);
 }
 
+// sleeve
+module _sleeve(x,y,z,wt,center=false)
+{
+    assert(wt>0, str("given wall thickness wt=",wt," must be greater than zero"));
+   
+    // solve center transform
+    tf = center ? [-x/2,-y/2,z/2] : [0,0,0];
+    
+    translate(tf)
+    difference()
+    {
+        
+        // outer shell
+        cube([x,y,z],d);
+        
+        // hole
+        translate([wt,wt,-0.005])
+            cube([x-2*wt,y-2*wt,z+2*0.01],d-2*wt);
+    }
+}
+
+module sleeve(s,wt,center=false)
+{
+    assert(len(s)==3, str("given size vector has size, ", len(s), " but size 3 is required"));
+    _sleeve(s.x, s.y, s.z, wt, center);
+}
+
+// sleeve with rounded corners
+module _sleeve_r(x,y,z,d,wt,center=false)
+{
+    assert(wt>0, str("given wall thickness wt=",wt," must be greater than zero"));
+    assert(d>=2*wt, str("given diameter d=",d," must be at least twice of wall thickness wt=", wt));  
+   
+    // solve center transform
+    tf = center ? [-x/2,-y/2,z/2] : [0,0,0];
+    
+    translate(tf)
+    difference()
+    {
+        
+        // outer shell
+        cube_r([x,y,z],d);
+        
+        // hole
+        translate([wt,wt,-0.005])
+            cube_r([x-2*wt,y-2*wt,z+2*0.01],d-2*wt);
+    }
+}
+
+module sleeve_r(s,d,wt,center=false)
+{
+    assert(len(s)==3, str("given size vector has size, ", len(s), " but size 3 is required"));
+    _sleeve_r(s.x, s.y, s.z, d, wt, center);
+}
 
 ////////////////////////////////////////////////////////////////////////////
 // trash to be removed
