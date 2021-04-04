@@ -2,6 +2,8 @@
 include<cover-names-parameters.scad>
 // including skew it module
 include<../_lib/skew-it.scad>
+// including cuts
+include<../_lib/pattern-cuts.scad>
 
 // organizer parameters
 _oy = l_by;
@@ -25,7 +27,10 @@ _ox = l_bd/2+nts+wt+ max(cx+sqrt(ccy*ccy-_oz*_oz), lx+sqrt(la*la-_oz*_oz))
         +2*wt+l_bd/2;
 
 
-// TODO paramters for fill
+// filler parameters
+_fx = l_bx-_ox-tol;
+_fy = _oy;
+_fz = _oz + wt;
 
 // this modules contain holes for both box and organizer.
 module holes(x,y,z,r, box=true)
@@ -106,19 +111,19 @@ module organizer()
     }
 }
 
-organizer();
+//organizer();
 
 module box_cover()
 {
     difference()
     {
         // main body
-        cover_r(s=[_ox,_oy,_oz], d=2*_or, wt=wt, bt=bt);
+        cover_r(s=[_ox,_oy,_oz+1], d=2*_or, wt=wt, bt=bt);
         
-
+        translate([0,0,1])
         difference()
         {
-            // silhouette
+            // killer silhouette
             _sf = 2;
             translate([2*wt,_oy/2,_oz-2.001])
                 rotate([0,0,-90])
@@ -199,4 +204,35 @@ module pattern(pattern,g=25,dist=1)
     }
 
 }
+
+module filler()
+{
+    _pd = 10;
+    _pt = 2;
+    difference()
+    {
+        // main shape
+        cover_r_hex(s=[_fx, _fy, _fz], d=2*_or, wt=wt, bt=bt, pd=_pd, pt=_pt);
+        //box_r_hex(s=[_fx, _fy, _fz], d=2*_or, wt=wt, bt=bt, pd=10, pt=2);
+
+
+        // killer silhoutte
+        _sf = 2;
+            translate([2*wt,_fy/2,_fz-2.001])
+                rotate([0,0,-90])
+                    scale([2,2,1.01])
+                        import("killer.stl");
+    }
+
+    // adding hexagonal pattern
+    translate([0,0,_fz-bt])
+    difference()
+    {
+        cube_r(s=[_fx,_fy,bt],d=2*_or);        
+        translate([-wt,0,-eps2])
+            hexagonal_pattern(s=[_fx-wt,_fy,bt+eps], d=_pd, t=_pt, vertical=false);
+    }
+}
+
+filler();
 
