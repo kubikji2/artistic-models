@@ -70,19 +70,19 @@ module round_cube (x,y,z,d, center=false)
 }
 
 // wrapper for _round_cube module
-// '-> dimensions t=[x,y,z]
+// '-> dimensions s=[x,y,z]
 // '-> d - diameter of corners rounded in XY-plane
-module round_cube (t,d, center=false)
+module round_cube (s,d, center=false)
 {   
-    assert(len(t)==3, str("given size vector has size, ", len(t), " but size 3 is required"));
-    _round_cube(t.x,t.y,t.z,d, center);
+    assert(len(s)==3, str("given size vector has size, ", len(s), " but size 3 is required"));
+    _round_cube(s.x,s.y,s.z,d, center);
 }
 
 // wrapper for _round_cube module
 // '-> same interface and name as cube module
-module cube_r(t,d, center=false)
+module cube_r(s,d, center=false)
 {
-    round_cube(t,d, center);
+    round_cube(s,d, center);
 }
 
 // creates cube of given dimenions x,y,z with corners rounded in XYZ by diameter d
@@ -120,19 +120,19 @@ module sphere_cube(x,y,z,d, center=false)
 }
 
 // wrapper for _sphere_cube module
-// '-> dimensions t=[x,y,z]
+// '-> dimensions s=[x,y,z]
 // '-> d - rounded corners diameter
-module sphere_cube(t,d, center=false)
+module sphere_cube(s,d, center=false)
 {
-    assert(len(t)==3, str("given size vector has size, ", len(t), " but size 3 is required"));
+    assert(len(s)==3, str("given size vector has size, ", len(s), " but size 3 is required"));
     _sphere_cube(t.x,t.y,t.z,d, center);
 }
 
 // wrapper for _sphere_cube module
 // '-> same interface and name as cube module
-module cube_s (t,d, center=false)
+module cube_s (s,d, center=false)
 {
-    sphere_cube(t,d, center);
+    sphere_cube(s,d, center);
 }
 
 /********
