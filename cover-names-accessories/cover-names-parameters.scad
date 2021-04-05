@@ -29,8 +29,12 @@ ntx = 68.5;
 nty = 45;
 
 // name tags stack 
-// '-> there are two stack in total
+// '-> there are two stacks in total
 nts = 39;
+
+// duel name tags stack size
+// '-> there are three stacks in total
+nts_d = 27;
 
 // characters parameters
 ccx = 73;
@@ -38,9 +42,17 @@ ccy = 49;
 ccz = 1.5;
 ccs = 36;
 
+// duel character parameters
+ccs_d = 22;
+
 // contact layout parameters
 la = 68;
 ls = 11.5;
+
+// contact layout for duet variant
+lx_d = 81;
+ly_d = 63;
+ls_d = 30; 
 
 // hourglass parameters
 hgd = 22;
