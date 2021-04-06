@@ -134,6 +134,7 @@ module box_cover()
         // main body
         cover_r(s=[_ox,_oy,_oz+1], d=2*_or, wt=wt, bt=bt);
         
+        // killer and layout pattern
         translate([0,0,1])
         difference()
         {
@@ -157,7 +158,11 @@ module box_cover()
             translate([0, 2*wt,_oz-bt])
                 pattern(_pattern,gx=_gx,gy=_gy);
         }
-
+        
+        // finger hole for the cover
+        translate([0,_oy/2,0])
+            rotate([0,90,0])
+                cylinder_thd(h=_ox,d=ntx/2,tol_h=eps,tol_d=0);
     }
 }
 
