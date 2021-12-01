@@ -39,11 +39,7 @@ module logo()
     // The shapes
     poly_path4506(height, width);
 
-
 }
-
-
-
 
 
 module text_and_logo()
@@ -54,7 +50,7 @@ module text_and_logo()
     translate([0,0,-eps]) text_arch(32,"Если не мы",step_angle);
     translate([0,0,-eps]) text_arch_inv(32,"то кто?",step_angle);
     
-    translate([0,0,-eps])
+    translate([0,0,eps])
     difference()
     {
         cylinder(d=92,h=2);
@@ -63,9 +59,10 @@ module text_and_logo()
     }
 }
 
+
 module coaster()
 {
-    /*
+    
     color([0.2,0.2,0.2])
     translate([0,0,0])
     difference()
@@ -74,7 +71,6 @@ module coaster()
         translate([0,0,2]) text_and_logo(h=2);
         
     }
-    */
     
     translate([0,0,2])
         color("red")
@@ -82,6 +78,7 @@ module coaster()
 
     
 }
+
 
 module text_arch(radius, chars, chars_len)
 {
@@ -107,6 +104,7 @@ module text_arch(radius, chars, chars_len)
     }
 }
 
+
 module text_arch_inv(radius, chars, chars_len)
 {
     PI = 3.14159;
@@ -129,7 +127,6 @@ module text_arch_inv(radius, chars, chars_len)
             }
     }
 }
-
 
 
 $fn=250;
