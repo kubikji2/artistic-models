@@ -1,5 +1,7 @@
 include <../../solidpp/solidpp.scad>
 
+include <cr2032-holder.scad>
+
 // customizable parameters
 // used magnet diameter
 magnet_diameter = 3;
@@ -79,7 +81,12 @@ module electronics()
     color(gray)
     translate([0,0,-c_h])
     {
+        // adding baseplate
         cylinder(d=c_d, h=e_t);
+        
+        // adding battery holder
+        translate([0,0,e_t])
+            cr2032_holder();
     }
 }
 
@@ -142,4 +149,4 @@ module main(is_top=false)
 
 main();
 
-//electronics();
+electronics();
