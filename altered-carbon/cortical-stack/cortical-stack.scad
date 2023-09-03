@@ -1,5 +1,12 @@
 include <../../solidpp/solidpp.scad>
 
+// customizable parameters
+// used magnet diameter
+magnet_diameter = 3;
+// used magnet height
+magnet_height = 2;
+
+
 // SOURCE PIECES
 
 // top base piece
@@ -65,6 +72,7 @@ black = [0.25,0.25,0.25];
 gray = [0.5, 0.5, 0.5];
 // '-> gray color'
 
+
 // electronics board
 module electronics()
 {
@@ -75,10 +83,19 @@ module electronics()
     }
 }
 
+
+// holes for both electronic board and the main body
+module electronics_hole()
+{
+
+}
+
+
 // main bodies
 module main(is_top=false)
 {
     // reference piece
+    /*
     if (is_top)
     {
         reference_top();
@@ -87,7 +104,8 @@ module main(is_top=false)
     {
         reference_bottom();
     }
-
+    */
+    
     color(black)
     difference()
     {
@@ -105,10 +123,23 @@ module main(is_top=false)
         cylinder(d=c_d+2*clrn, h=2*(c_h+clrn), center=true);
 
         // cut for switch
+
+        // cut for the magnets
+        magnet_position = [ [    0, -20],
+                            [ 19.5,  -8],
+                            [-19.5,  -8],
+                            [   14,  16],
+                            [  -14,  16]];
         
+        for (pos=magnet_position)
+        {
+            translate(pos)
+                cylinderpp(d=magnet_diameter+2*clrn, h=2*(magnet_height+clrn), center=true);
+        }
+
     }
 }
 
-main(true);
+main();
 
 //electronics();
