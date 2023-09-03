@@ -20,13 +20,13 @@ d_b = d_e + 1.5;
 h_b = 1;
 
 
-// battery data
+// BATTERY dimensions
 // battery diameter
 bat_d = 20;
 // batter heigh
 bat_h = 3.3;
-// battery holder thickness
-bh_t = 1.5;
+// battery wall thickness
+bat_wt = 1.5;
 
 
 // battery box parameters
@@ -56,8 +56,21 @@ bb_off = -0.2;
 
 
 // holder for cr2032 battery
-module cr2032_holder()
+module cr2032_holder(d=bat_d+2*bat_wt, h=4.5)
 {   
+    // TODO parameter checking
+    _d = d;
+    _r = _d/2;
+    _h = h;
+
+    // adding batery holder stuff
+    // main block has dimension of catode and two battery box borders
+    ch_x = bc_w+2;
+    ch_y = 2*bb_h;
+    ch_z = _h;
+    ch_x_off = -ch_x/2;
+    ch_y_off = -bat_d/2-ch_y+bb_h;
+    ch_z_off = 0;
 
     // anode cut y dimension
     ac_y = d_b/2-(d_b/2-led_l)+ba_l_ext;
@@ -66,71 +79,48 @@ module cr2032_holder()
     // basic platform
     difference()
     {
-        // battery border
-        cylinder(d=bat_d+2*bh_t,h=h_e);
-        
+        union()
+        {
+            // battery border
+            cylinder(d=_d,h=_h);
+
+            // anode and catode holder
+            translate([ch_x_off, ch_y_off, ch_z_off])
+                cube([ch_x,ch_y,ch_z]);
+        }
+
         // battery cut
-        translate([0,0,-eps]) cylinder(d=bat_d,h=2*bat_h+2*eps);
+        translate([0,0,-eps])
+            cylinder(d=bat_d,h=2*bat_h+2*eps);
         
         // hole for removing battery with screw driver
         rotate([0,0,215])
             translate([bat_d/2-0.5,-2,-eps])
-                cube([1,4,2*bat_h]);
+                cube([1,4,2*_h]);
                
         // anode cut holder
         translate([-ba_w/2,ac_y_off,-eps])
             cube([ba_w+2*eps,ac_y,bb_t+2*eps]);
         
         // catode cut y dimension
-        cc_z_off = h_e - 3*bb_t/2;
-        translate([-bc_w/2,-ac_y,cc_z_off])
-            cube([bc_w+2*eps,ac_y,bat_h+2*eps]);
+        cc_z_off = bat_h;
+        translate([-bc_w/2,-ac_y, cc_z_off])
+            cube([bc_w+2*eps,ac_y, bb_t]);
         
         // side cut of battery box, so we can inser battery
         translate([-bat_d/2,-eps,h_b+eps])
-            cube([bat_d,bat_d/2+bh_t+2*eps,h_e-h_b+eps]);
-    }
-    
-    // adding batery holder stuff
-    // main block has dimension of catode and two battery box borders
-    ch_x = bc_w+2;
-    ch_y = 2*bb_h;
-    ch_z = h_e;
-    ch_x_off = -ch_x/2;
-    ch_y_off = -bat_d/2-ch_y+bb_h;
-    ch_z_off = 0;
-    //translate([ch_x_off, ch_y_off, ch_z_off]) cube([ch_x,ch_y,bb_d]);
-    // TODO move anode hole up
-    // upper holder should be half size of hole
-    
-    difference()
-    {
-        translate([ch_x_off, ch_y_off, ch_z_off])
-            cube([ch_x,ch_y,ch_z]);
-        // catode cut y dimension
-        cc_y = d_b/2-(d_b/2-led_l);
-        // catode cut z offset
-        cc_z_off = h_e - 3*bb_t/2;
-        translate([-bc_w/2,-cc_y,cc_z_off])
-            cube([bc_w+2*eps,cc_y,bb_t+2*eps]);
-        // battery area cut
-        translate([-bc_w/2-2*bb_t,ch_y_off+bb_h-eps,-bb_t/2])
-            cube([bc_w+4*bb_t+2*eps,bb_h+2*eps,h_e]);
-        
-        // anode cut holder
-        translate([-ba_w/2,ac_y_off,-eps])
-            cube([ba_w+2*eps,ac_y,bb_t+eps]);
-        
+            cube([bat_d,_r+2*eps,_h-h_b+eps]);
     }
     
     // adding battery box upper beam
-    b_x = bat_d +  bh_t;
+    b_x = bat_d + bat_wt;
     b_y = 2*bb_h;
-    b_z = bb_t/2;
-    b_z_off = h_e-b_z;
-    translate([-b_x/2,-b_y/2,b_z_off]) cube([b_x,b_y,b_z]);
+    b_z = _h - bb_t - bat_h;
+    b_z_off = _h-b_z;
+    translate([-b_x/2,-b_y/2,b_z_off])
+        cube([b_x,b_y,b_z]);
    
 }
 
 
-//cr2032_holder();
+cr2032_holder();
