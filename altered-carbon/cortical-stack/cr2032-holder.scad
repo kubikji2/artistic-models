@@ -123,4 +123,4 @@ module cr2032_holder(d=bat_d+2*bat_wt, h=4.5)
 }
 
 
-cr2032_holder();
+//cr2032_holder();
