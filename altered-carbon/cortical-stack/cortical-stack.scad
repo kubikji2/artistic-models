@@ -56,6 +56,10 @@ clrn = 0.25;
 e_t = 1;
 // '-> thickness
 
+// leds -> 'led_'
+led_off = 5;
+// '-> led offset
+
 // Potentiometer parameters -> 'pm_'
 pm_x = 5;
 // '-> x dimension
@@ -86,7 +90,18 @@ module electronics()
         
         // adding battery holder
         translate([0,0,e_t])
-            cr2032_holder();
+            difference()
+            {
+                cr2032_holder(d=c_d, h=led_off);
+
+                // cut the corners off
+                tubepp(D=2*c_d, d=c_d+2, h=4*led_off, align="");
+            }
+        
+        // add the LEDs
+
+        // add the trimmer
+        
     }
 }
 
