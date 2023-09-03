@@ -404,7 +404,7 @@ module necklace()
     }
 }
 
-necklace();
+//necklace();
 
 //rotate([0,0,180]) %necklace();
 
