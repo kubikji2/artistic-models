@@ -251,8 +251,14 @@ module main(is_top=false)
         }
 
         // inner space
-        cylinder(d=c_d+2*clrn, h=2*(c_h+clrn), center=true);
-
+        if (is_top)
+        {
+            // add dome
+        }
+        else
+        {
+            cylinder(d=c_d+2*clrn, h=2*(c_h+clrn), center=true);
+        }
         // cut for switch
 
         // cut for the magnets
@@ -271,7 +277,7 @@ module main(is_top=false)
     }
 }
 
-main(true);
+//main();
 
 //electronics_bottom();
 
