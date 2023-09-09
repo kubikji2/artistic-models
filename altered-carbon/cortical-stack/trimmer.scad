@@ -54,29 +54,29 @@ th_t = 1.5;
 // trimmer holder bottom thickness
 th_b = 0.5;
 
-module trimmer_holder()
+module trimmer_holder(wt=th_t,bt=th_b)
 {
     //%trimmer();
     difference()
     {
         // base block
-        t_x = -trb_x/2-th_t;
-        t_y = -trb_y/2-th_t;
+        t_x = -trb_x/2-wt;
+        t_y = -trb_y/2-wt;
         t_z = 0;
-        translate([t_x,t_y,t_z]) cube([trb_x+2*th_t, trb_y+2*th_t, trb_z+th_b+tol_z]);
+        translate([t_x,t_y,t_z]) cube([trb_x+2*wt, trb_y+2*wt, trb_z+bt+tol_z]);
         
         // trimmer
-        translate([0,0,tol_z+th_b+eps]) trimmer();
+        translate([0,0,tol_z+bt+eps]) trimmer();
         
         // improved trimmer box
-        translate([-trb_x/2-tol_xy/2,-trb_y/2-tol_xy/2,trc_z_off+tol_z/2])
+        translate([-trb_x/2-tol_xy/2,-trb_y/2-tol_xy/2,bt-trc_z_off-tol_z/2])
             cube([trb_x+tol_xy,trb_y+tol_xy,trb_z+2*tol_z]);
         
         // double contact holes
         c_xs = +trb_x/2-trc_x_off-tol_xy/2;
         c_yps = trc_y_off-trc_y/2-tol_xy;
         c_yns = -trc_y_off-trc_y/2-tol_xy; 
-        c_z = th_b;
+        c_z = bt;
         translate([c_xs,c_yps,c_z]) cube([trb_x,trc_y+2*tol_xy,trc_z+trb_z]);
         translate([c_xs,c_yns,c_z]) cube([trb_x,trc_y+2*tol_xy,trc_z+trb_z]);
         translate([c_xs,-trc_y/2-tol_xy/2,c_z]) cube([trb_x,trc_y+tol_xy,trc_z+trb_z]);
@@ -88,4 +88,4 @@ module trimmer_holder()
     }
 }
 
-trimmer_holder();
+//trimmer_holder();

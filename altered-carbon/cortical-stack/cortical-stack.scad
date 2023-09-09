@@ -122,12 +122,13 @@ module led_hole(M=10)
 
 module electronics_top()
 {
+    _d = (c_d - cr2032_d)/2 + cr2032_d;
+
     // base plate
     translate([0,0,led_off-c_h+e_t])
     {
         difference()
         {
-            _d = (c_d - cr2032_d)/2 + cr2032_d;
             
             // ring
             tubepp(h=e_t, d=_d, D=et_d, align="z");
@@ -152,8 +153,25 @@ module electronics_top()
         }
 
         // add the trimmer
+        _tr_wt = 1;
+        _tr_off = trb_y+ 2*_tr_wt;
 
-        // add switch
+        // add support beam
+        difference()
+        {
+            cubepp([c_d,2*bb_h,e_t], align="z");
+            
+            // trimmer hole
+            translate([_tr_off/2,0,0])
+                cubepp([_tr_off,_tr_off, _tr_off],align="z");
+        }
+
+        // add trimmer holder
+        translate([_tr_off/2,0,0])
+            rotate([0,0,90])
+                trimmer_holder(wt=_tr_wt,bt=e_t);
+
+        // add switch holder
     
     }
 }
@@ -215,7 +233,7 @@ module main(is_top=false)
     }
 }
 
-//main();
+//main(true);
 
 electronics_bottom();
 
