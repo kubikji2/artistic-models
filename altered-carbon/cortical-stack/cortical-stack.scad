@@ -60,6 +60,9 @@ et_r_off = 4;
 // '-> top radius offset 
 et_d = c_d + 2*et_r_off;
 
+et_cut_a = 16;
+// tol electronic cut withd
+
 // leds -> 'led_'
 led_off = 5;
 // '-> led offset
@@ -171,6 +174,15 @@ module electronics_top()
                 }
             }
 
+            // cut for the cortical stack geometry
+            difference()
+            {
+                cubepp([et_cut_a, et_d, 3*e_t], align="y");
+                
+                mirrorpp([1,0,0], true)
+                rotate([0,0,-(360/led_count)/2])
+                    cubepp([2+led_y, et_d, 4*e_t], align="y");
+            }
         }
 
         // add the trimmer
@@ -263,4 +275,4 @@ main(true);
 
 //electronics_bottom();
 
-//electronics_top();
+electronics_top();
