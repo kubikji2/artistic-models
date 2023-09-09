@@ -73,6 +73,12 @@ led_z = 1.6;
 // '-> led box z dimension
 led_count = 5;
 
+// switch paramters -> 'sw_'
+sw_x = 10;
+sw_y = 6.5;
+sw_z = 2.5;
+sw_wt = 0.6;
+
 // Potentiometer parameters -> 'pm_'
 pm_x = 5;
 // '-> x dimension
@@ -118,6 +124,21 @@ module led_hole(M=10)
     cylinderpp(d=led_d, h=M, align="z");
 
     cubepp([led_x,led_y,M], align="Z");
+}
+
+
+module switch_holder(wt = 1)
+{
+    _x = 2*wt + sw_x;
+    _y = sw_y;
+    _z = 2*wt + sw_z;
+
+    difference()
+    {
+        translate([0,0,0-wt])
+            cubepp([_x,_y,_z], align="z");
+        cubepp([sw_x,2*sw_y, sw_z], align="z");
+    }
 }
 
 module electronics_top()
@@ -172,7 +193,12 @@ module electronics_top()
                 trimmer_holder(wt=_tr_wt,bt=e_t);
 
         // add switch holder
-    
+        _sw_off = sw_x;
+        translate([-_sw_off/2,0,e_t])
+        {
+            switch_holder(wt=sw_wt);
+            cubepp([sw_x+2*sw_wt, sw_y,e_t], align="Z");
+        }
     }
 }
 
@@ -233,8 +259,8 @@ module main(is_top=false)
     }
 }
 
-//main(true);
+main(true);
 
-electronics_bottom();
+//electronics_bottom();
 
-electronics_top();
+//electronics_top();
