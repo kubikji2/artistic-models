@@ -22,11 +22,11 @@ h_b = 1;
 
 // BATTERY dimensions
 // battery diameter
-bat_d = 20;
+cr2032_d = 20;
 // batter heigh
-bat_h = 3.3;
+cr2032_h = 3.3;
 // battery wall thickness
-bat_wt = 1.5;
+cr2032_wt = 1.5;
 
 
 // battery box parameters
@@ -55,8 +55,8 @@ bc_w = 11.5;
 bb_off = -0.2;
 
 
-// holder for cr2032 battery
-module cr2032_holder(d=bat_d+2*bat_wt, h=4.5)
+// holder for cr2032_ battery
+module cr2032_holder(d=cr2032_d+2*cr2032_wt, h=4.5)
 {   
     // TODO parameter checking
     _d = d;
@@ -69,7 +69,7 @@ module cr2032_holder(d=bat_d+2*bat_wt, h=4.5)
     ch_y = 2*bb_h;
     ch_z = _h;
     ch_x_off = -ch_x/2;
-    ch_y_off = -bat_d/2-ch_y+bb_h;
+    ch_y_off = -cr2032_d/2-ch_y+bb_h;
     ch_z_off = 0;
 
     // anode cut y dimension
@@ -91,11 +91,11 @@ module cr2032_holder(d=bat_d+2*bat_wt, h=4.5)
 
         // battery cut
         translate([0,0,-eps])
-            cylinder(d=bat_d,h=2*bat_h+2*eps);
+            cylinder(d=cr2032_d,h=2*cr2032_h+2*eps);
         
         // hole for removing battery with screw driver
         rotate([0,0,215])
-            translate([bat_d/2-0.5,-2,-eps])
+            translate([cr2032_d/2-0.5,-2,-eps])
                 cube([1,4,2*_h]);
                
         // anode cut holder
@@ -103,19 +103,19 @@ module cr2032_holder(d=bat_d+2*bat_wt, h=4.5)
             cube([ba_w+2*eps,ac_y,bb_t+2*eps]);
         
         // catode cut y dimension
-        cc_z_off = bat_h;
+        cc_z_off = cr2032_h;
         translate([-bc_w/2,-ac_y, cc_z_off])
             cube([bc_w+2*eps,ac_y, bb_t]);
         
         // side cut of battery box, so we can inser battery
-        translate([-bat_d/2,-eps,h_b+eps])
-            cube([bat_d,_r+2*eps,_h-h_b+eps]);
+        translate([-cr2032_d/2,-eps,h_b+eps])
+            cube([cr2032_d,_r+2*eps,_h-h_b+eps]);
     }
     
     // adding battery box upper beam
-    b_x = bat_d + bat_wt;
+    b_x = cr2032_d + cr2032_wt;
     b_y = 2*bb_h;
-    b_z = _h - bb_t - bat_h;
+    b_z = _h - bb_t - cr2032_h;
     b_z_off = _h-b_z;
     translate([-b_x/2,-b_y/2,b_z_off])
         cube([b_x,b_y,b_z]);
@@ -123,4 +123,4 @@ module cr2032_holder(d=bat_d+2*bat_wt, h=4.5)
 }
 
 
-//cr2032_holder();
+//cr2032__holder();

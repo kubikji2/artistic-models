@@ -1,6 +1,7 @@
 include <../../solidpp/solidpp.scad>
 
 include <cr2032-holder.scad>
+include <trimmer.scad>
 
 // customizable parameters
 // used magnet diameter
@@ -55,10 +56,22 @@ clrn = 0.25;
 // electronics board -> 'e_'
 e_t = 1;
 // '-> thickness
+et_r_off = 4;
+// '-> top radius offset 
+et_d = c_d + 2*et_r_off;
 
 // leds -> 'led_'
 led_off = 5;
 // '-> led offset
+led_d = 1.8;
+// '-> led diameter
+led_x = 3.3;
+// '-> led box x dimension
+led_y = 2.3;
+// '-> led box y dimension
+led_z = 1.6;
+// '-> led box z dimension
+led_count = 5;
 
 // Potentiometer parameters -> 'pm_'
 pm_x = 5;
@@ -80,7 +93,7 @@ gray = [0.5, 0.5, 0.5];
 
 
 // electronics board
-module electronics()
+module electronics_bottom()
 {
     color(gray)
     translate([0,0,-c_h])
@@ -96,12 +109,52 @@ module electronics()
 
                 // cut the corners off
                 tubepp(D=2*c_d, d=c_d+2, h=4*led_off, align="");
+            }        
+    }
+}
+
+module led_hole(M=10)
+{
+    cylinderpp(d=led_d, h=M, align="z");
+
+    cubepp([led_x,led_y,M], align="Z");
+}
+
+module electronics_top()
+{
+    // base plate
+    translate([0,0,led_off-c_h+e_t])
+    {
+        difference()
+        {
+            _d = (c_d - cr2032_d)/2 + cr2032_d;
+            
+            // ring
+            tubepp(h=e_t, d=_d, D=et_d, align="z");
+            
+            // ring bevel
+            cylinderpp(d1=_d,d2=c_d,h=e_t+eps);
+            
+            // add the LED holes
+            for(i=[0:led_count-1])
+            {
+                _a = -90 + i*(360/led_count);
+                _l = c_d/2 + et_r_off/2;
+
+                if (i != 0)
+                {
+                    rotate([0,0,_a])
+                        translate([_l,0,e_t/2])
+                            led_hole();
+                }
             }
-        
-        // add the LEDs
+
+        }
 
         // add the trimmer
-        
+
+        // add switch
+    
     }
 }
 
@@ -162,6 +215,8 @@ module main(is_top=false)
     }
 }
 
-main();
+//main();
 
-electronics();
+electronics_bottom();
+
+electronics_top();
