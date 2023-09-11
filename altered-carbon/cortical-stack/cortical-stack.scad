@@ -5,10 +5,11 @@ include <trimmer.scad>
 
 // customizable parameters
 // used magnet diameter
-magnet_diameter = 3;
+magnet_diameter = 4;
 // used magnet height
-magnet_height = 2;
-
+magnet_height = 0.8;
+// magnet clearance
+magnet_clearance = 0.1;
 
 // SOURCE PIECES
 
@@ -271,14 +272,14 @@ module main(is_top=false)
         for (pos=magnet_position)
         {
             translate(pos)
-                cylinderpp(d=magnet_diameter+2*clrn, h=2*(magnet_height+clrn), center=true);
+                cylinderpp(d=magnet_diameter+2*magnet_clearance, h=2*(magnet_height+magnet_clearance), center=true);
         }
 
     }
 }
 
-//main();
+main(true);
 
 //electronics_bottom();
 
-electronics_top();
+//electronics_top();
